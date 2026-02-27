@@ -1,131 +1,73 @@
-# Gran-Canaria-Ride-System-G7
+# React + TypeScript + Vite
 
-# GC Mobility Platform
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-A web-based mobility platform for renting bicycles and electric scooters in Gran Canaria.  
-The application combines real-time vehicle rental, gamification, and sustainability tracking in one unified system.
+Currently, two official plugins are available:
 
----
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Overview
+## React Compiler
 
-GC Mobility Platform is designed as a scalable, mobile-first web application that enables users to:
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-- Locate available bikes and e-scooters on an interactive map
-- Rent vehicles in real time
-- Track ride statistics and environmental impact
-- Participate in daily and weekly challenges
-- Earn rewards through sustainable usage
+## Expanding the ESLint configuration
 
-The platform focuses on usability, engagement, and sustainable urban transport.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
----
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-## Core Features
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-### 1. Public Homepage
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
 
-- Clear value proposition
-- How-it-works explanation
-- Pricing overview
-- Call-to-action for registration/login
-- Sustainability highlight
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
----
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-### 2. Authentication System
-
-- Secure user registration and login
-- Profile management
-- Ride history tracking
-- Session-based access control
-
-Authenticated users gain access to rewards, challenges, and ride tracking.
-
----
-
-### 3. Rental System (Core Functionality)
-
-The main feature of the application.
-
-- Interactive map integration (e.g., Google Maps API)
-- Real-time vehicle availability
-- Map markers for:
-  - Electric scooters
-  - Bicycles
-- Vehicle status indicators (available, reserved, low battery)
-- Rental initiation and ride timer
-- Ride completion and cost calculation
-
-This functions as a real-time, location-based rental system.
-
----
-
-### 4. Rewards System
-
-Gamified engagement model:
-
-- Points earned per ride
-- Bonus points for sustainable usage
-- Redeemable rewards such as:
-  - Food vouchers
-  - Drink discounts
-  - Partner promotions
-
-Designed to improve retention and encourage repeat usage.
-
----
-
-### 5. Challenge System (Daily / Weekly)
-
-Structured user challenges to increase activity:
-
-Examples:
-- Ride 10 km this week
-- Complete 3 rides in 5 days
-- Save 5 kg CO₂
-
-Users receive rewards upon completion.
-
----
-
-### 6. Sustainability Tracking
-
-- Distance traveled
-- Ride duration
-- CO₂ saved (compared to car travel baseline)
-- Personal impact dashboard
-
-Provides measurable environmental impact data.
-
----
-
-## Technical Direction
-
-- Web-based application
-- Mobile-first design
-- Map API integration
-- Authentication & session handling
-- Real-time vehicle state management
-- Modular and scalable architecture
-
----
-
-## Project Goal
-
-To build a modern urban mobility platform that:
-
-- Makes transportation accessible and convenient
-- Encourages sustainable behavior
-- Increases engagement through gamification
-- Provides a clean and intuitive user experience
-
----
-
-## Future Improvements
-
-- Payment gateway integration
-- Push notifications
-- Admin vehicle management dashboard
-- Expanded reward partnerships
-- Native mobile application support
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
+```
