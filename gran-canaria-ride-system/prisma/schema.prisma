@@ -10,19 +10,17 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  // uncommented because it keeps getting an error it seems to work without
+  // when calling backend uncomment the line below
   // url      = env("DATABASE_URL")
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  fname     String?   @db.VarChar(50)
-  lname     String?   @db.VarChar(50)
-  email     String    @unique @db.VarChar(80)
-  password  String    @db.VarChar(50)
-  isActive  Boolean   @default(true) @db.TinyInt
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(100)
+  password  String   @db.VarChar(255)
+  points    Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Ride {
