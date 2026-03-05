@@ -12,6 +12,7 @@ datasource db {
   provider = "mysql"
   // when calling backend uncomment the line below
   url      = env("DATABASE_URL")
+  
 }
 
 model User {
