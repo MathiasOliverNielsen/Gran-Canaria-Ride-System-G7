@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+// @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap");
 
-$teal: #43A195;
+$teal: #43a195;
 $light-gray: #eaeaea;
 
 .rewards-page {
   padding: 20px;
   background: #f2f2f2;
   min-height: 100vh;
-  color: #000;               /* ensure black text */
-  font-family: 'Quicksand', sans-serif;
+  color: #000; /* ensure black text */
+  font-family: "Quicksand", sans-serif;
 }
 
 .points-header {
@@ -52,8 +52,6 @@ $light-gray: #eaeaea;
   margin: 40px 0 20px 0;
 }
 
-/* ---------- STATS ---------- */
-
 .stats {
   display: flex;
   justify-content: space-between;
@@ -73,22 +71,20 @@ $light-gray: #eaeaea;
   }
 }
 
-/* ---------- PROGRESS ---------- */
-
 .progress-wrapper {
   margin-bottom: 30px;
 }
 
 .progress-bar {
   height: 8px;
-  background: #43A195;
+  background: #43a195;
   border-radius: 20px;
   position: relative;
 }
 
 .progress-fill {
   height: 100%;
-  background: #FFD565;
+  background: #ffd565;
   border-radius: 20px;
 }
 
@@ -135,8 +131,6 @@ $light-gray: #eaeaea;
   }
 }
 
-/* ---------- MILESTONE BOXES ---------- */
-
 .milestone-boxes {
   display: flex;
   flex-direction: column;
@@ -170,8 +164,6 @@ $light-gray: #eaeaea;
   }
 }
 
-/* ---------- REWARDS ---------- */
-
 .rewards-section h2 {
   margin-bottom: 12px;
 }
@@ -183,8 +175,8 @@ $light-gray: #eaeaea;
 }
 
 .reward-card {
-  background: $teal;          /* match progress bar fill */
-  color: white;              /* ensure readable on teal */
+  background: $teal; /* match progress bar fill */
+  color: white; /* ensure readable on teal */
   padding: 16px;
   border-radius: 14px;
   display: flex;

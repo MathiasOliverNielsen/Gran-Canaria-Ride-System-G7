@@ -3,7 +3,7 @@
 import { Reward } from "@/types/reward";
 import RewardCard from "./RewardCard";
 import PointsHeaderClient from "./PointsHeaderClient";
-import "@/styles/rewards.scss";
+import "../../styles/rewards.scss";
 
 interface RewardsPageProps {
   userPoints: number;
@@ -12,15 +12,9 @@ interface RewardsPageProps {
   rewards: Reward[];
 }
 
-export default function RewardsPage({
-  userPoints,
-  distance,
-  time,
-  rewards,
-}: RewardsPageProps) {
+export default function RewardsPage({ userPoints, distance, time, rewards }: RewardsPageProps) {
   return (
     <div className="rewards-page">
-
       <PointsHeaderClient points={userPoints} distance={distance} time={time} />
 
       <div className="rewards-section">
@@ -28,11 +22,7 @@ export default function RewardsPage({
 
         <div className="rewards-list">
           {rewards.map((reward) => (
-            <RewardCard
-              key={reward.id}
-              reward={reward}
-              userPoints={userPoints}
-            />
+            <RewardCard key={reward.id} reward={reward} userPoints={userPoints} />
           ))}
         </div>
       </div>
