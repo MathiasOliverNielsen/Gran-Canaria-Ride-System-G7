@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "eslint"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "6.0.0",
     "bcrypt": "^6.0.0",
@@ -29,6 +32,7 @@
     "eslint-config-next": "16.1.6",
     "prisma": "6.0.0",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   }
 }
