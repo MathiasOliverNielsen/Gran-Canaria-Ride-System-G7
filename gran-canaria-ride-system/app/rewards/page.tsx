@@ -1,29 +1,50 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import RewardsPage from "@/components/rewards/RewardsPage";
 import { Reward } from "@/types/reward";
 
 export default function Home() {
-  // Mocked data (replace with API later)
   const userPoints = 0; // start at 0
   const distance = 0; // km
   const time = "00:00";
+  const [rewards, setRewards] = useState<Reward[]>([]);
 
-  const rewards: Reward[] = [
-    { id: "1", title: "", requiredPoints: 10 },
-    { id: "2", title: "", requiredPoints: 20 },
-    { id: "3", title: "", requiredPoints: 30 },
-  ];
+  useEffect(() => {
+    const fetchRewards = async () => {
+      try {
+        const response = await fetch("/api/rewards");
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch rewards: ${response.status}`);
+        }
+
+        const data: Array<{ id: number; title: string; cost: number }> =
+          await response.json();
+
+        console.log("Rewards from API:", data);
+
+        const mappedRewards: Reward[] = data.map((reward) => ({
+          id: String(reward.id),
+          title: reward.title,
+          requiredPoints: reward.cost,
+        }));
+
+        setRewards(mappedRewards);
+      } catch (error) {
+        console.error("Failed to load rewards:", error);
+      }
+    };
+
+    fetchRewards();
+  }, []);
 
   return (
     <RewardsPage
       userPoints={userPoints}
       distance={distance}
       time={time}
-      rewards={rewards.map((r) => ({
-        ...r,
-        title: `${r.requiredPoints} KM Trophy`,
-      }))}
+      rewards={rewards}
     />
   );
 }
