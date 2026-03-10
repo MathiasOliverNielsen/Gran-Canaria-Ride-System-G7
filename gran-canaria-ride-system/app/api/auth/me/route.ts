@@ -9,10 +9,9 @@ interface JWTPayload {
 
 export async function GET(request: NextRequest) {
   try {
-    // Get token from cookie or Authorization header
-    const cookieToken = request.cookies.get("auth-token")?.value;
+    // Get token from Authorization header
     const authHeader = request.headers.get("authorization");
-    const token = cookieToken || (authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : null);
+    const token = authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : null;
 
     if (!token) {
       return NextResponse.json(
@@ -40,17 +39,11 @@ export async function GET(request: NextRequest) {
 
     // Get user from database
     const user = await prisma.user.findUnique({
-      where: {
-        id: decoded.userId,
-        isActive: true,
-        deletedAt: null,
-      },
+      where: { id: decoded.userId },
       select: {
         id: true,
         email: true,
         points: true,
-        isAdmin: true,
-        isActive: true,
         createdAt: true,
         updatedAt: true,
       },

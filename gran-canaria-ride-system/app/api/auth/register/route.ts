@@ -39,13 +39,11 @@ export async function POST(request: NextRequest) {
         email,
         password: hashedPassword,
         points: 0,
-        isActive: true,
       },
       select: {
         id: true,
         email: true,
         points: true,
-        isActive: true,
         createdAt: true,
       },
     });
