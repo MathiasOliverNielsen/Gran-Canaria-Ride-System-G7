@@ -15,15 +15,10 @@ interface AuthResult {
 
 export async function authenticate(request: NextRequest): Promise<AuthResult> {
   try {
+    // Try cookie first, fallback to Authorization header for API compatibility
+    const cookieToken = request.cookies.get("auth-token")?.value;
     const authHeader = request.headers.get("authorization");
-
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return {
-        error: NextResponse.json({ success: false, error: "No token provided" }, { status: 401 }),
-      };
-    }
-
-    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+    const token = cookieToken || (authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : null);
 
     if (!token) {
       return {
