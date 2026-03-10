@@ -1,16 +1,15 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
-    <>
-      {
-        <div>
-          <div>
-            <h1>Gran Canaria Ride System</h1>
-          </div>
-          <div>
-            <p>Welcome to the Gran Canaria Ride System application.</p>
-          </div>
-        </div>
-      }
-    </>
+    <main>
+      <h1>Welcome to Gran Canaria Ride System</h1>
+      <p>This is the home page.</p>
+      <p>
+        <Link href="/rewards" className="text-blue-500 underline">
+          View rewards
+        </Link>
+      </p>
+    </main>
   );
 }

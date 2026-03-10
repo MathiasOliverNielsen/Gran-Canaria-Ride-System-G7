@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import { authenticate } from "@/lib/auth";
+import { prisma } from "../../../../lib/prisma";
+import { authenticate } from "../../../../lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 import { z } from "zod";

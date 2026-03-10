@@ -1,0 +1,214 @@
+// @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap");
+
+$teal: #43a195;
+$light-gray: #eaeaea;
+
+.rewards-page {
+  padding: 20px;
+  background: #f2f2f2;
+  min-height: 100vh;
+  color: #000; /* ensure black text */
+  font-family: "Quicksand", sans-serif;
+}
+
+.points-header {
+  background: #f2f2f2;
+}
+
+/* header navigation layout */
+.points-header .header-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #f2f2f2;
+  padding: 12px 20px;
+}
+
+.points-header .header-nav .logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.points-header .header-nav .menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.points-header .header-nav .menu-button img {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 40px 0 20px 0;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  .stat-label {
+    font-size: 12px;
+    color: #000;
+  }
+
+  .stat-value {
+    font-weight: 600;
+  }
+
+  .points-number {
+    font-size: 22px;
+  }
+}
+
+.progress-wrapper {
+  margin-bottom: 30px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #43a195;
+  border-radius: 20px;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #ffd565;
+  border-radius: 20px;
+}
+
+.progress-dot {
+  position: absolute;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  background: #fbc72d;
+  border-radius: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.progress-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 8px;
+  font-size: 12px;
+  box-sizing: border-box;
+  position: relative;
+
+  .progress-mark {
+    text-align: center;
+
+    span {
+      display: block;
+      font-size: 10px;
+    }
+  }
+
+  /* Position 25 km label absolutely at 25% */
+  .progress-mark:nth-child(2) {
+    position: absolute;
+    left: 25%;
+    transform: translateX(-50%);
+  }
+
+  /* Position 75 km label absolutely at 75% */
+  .progress-mark:nth-child(4) {
+    position: absolute;
+    left: 75%;
+    transform: translateX(-50%);
+  }
+}
+
+.milestone-boxes {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.milestone-box {
+  background: white;
+  border-radius: 12px;
+  padding: 14px;
+  border: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .milestone-title {
+    font-weight: 600;
+  }
+
+  .milestone-sub {
+    font-size: 12px;
+    color: #000;
+  }
+
+  .milestone-check {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #aaa;
+    border-radius: 6px;
+  }
+}
+
+.rewards-section h2 {
+  margin-bottom: 12px;
+}
+
+.rewards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* space between cards */
+}
+
+.reward-card {
+  background: $teal; /* match progress bar fill */
+  color: white; /* ensure readable on teal */
+  padding: 16px;
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s ease;
+}
+
+.reward-card.active {
+  /* maybe slightly darker or same as non-active depending on design */
+  background: darken($teal, 5%);
+}
+
+.reward-card.active .reward-required {
+  color: white;
+}
+
+.reward-required {
+  font-size: 12px;
+  color: white;
+}
+
+.redeem-button {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  background: #9e9e9e;
+  color: #000;
+  cursor: pointer;
+}
+
+.reward-card.active .redeem-button {
+  background: white;
+  color: $teal;
+}

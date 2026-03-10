@@ -2,47 +2,39 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { prisma } from "@/lib/prisma";
 
-export interface AuthenticatedRequest {
-  user: {
-    id: number;
-    email: string;
-  };
+interface AuthUser {
+  id: number;
+  email: string;
+  isAdmin?: boolean;
 }
 
-export async function authenticate(request: NextRequest): Promise<{ error?: NextResponse; user?: AuthenticatedRequest["user"] }> {
+interface AuthResult {
+  error?: NextResponse;
+  user?: AuthUser;
+}
+
+export async function authenticate(request: NextRequest): Promise<AuthResult> {
   try {
     const authHeader = request.headers.get("authorization");
-    const token = authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : null;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return {
+        error: NextResponse.json({ success: false, error: "No token provided" }, { status: 401 }),
+      };
+    }
+
+    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
 
     if (!token) {
       return {
-        error: NextResponse.json(
-          {
-            success: false,
-            error: "No token provided",
-          },
-          { status: 401 },
-        ),
+        error: NextResponse.json({ success: false, error: "No token provided" }, { status: 401 }),
       };
     }
 
-    // Verify token
-    let decoded: any;
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET!);
-    } catch (jwtError) {
-      return {
-        error: NextResponse.json(
-          {
-            success: false,
-            error: "Invalid or expired token",
-          },
-          { status: 401 },
-        ),
-      };
-    }
+    // Verify JWT token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
 
-    // Get user from database
+    // Get user from database to ensure they still exist and are active
     const user = await prisma.user.findUnique({
       where: {
         id: decoded.userId,
@@ -52,31 +44,21 @@ export async function authenticate(request: NextRequest): Promise<{ error?: Next
       select: {
         id: true,
         email: true,
+        isAdmin: true,
       },
     });
 
     if (!user) {
       return {
-        error: NextResponse.json(
-          {
-            success: false,
-            error: "User not found or inactive",
-          },
-          { status: 404 },
-        ),
+        error: NextResponse.json({ success: false, error: "User not found or inactive" }, { status: 401 }),
       };
     }
 
     return { user };
   } catch (error) {
+    console.error("Authentication error:", error);
     return {
-      error: NextResponse.json(
-        {
-          success: false,
-          error: "Authentication failed",
-        },
-        { status: 500 },
-      ),
+      error: NextResponse.json({ success: false, error: "Invalid token" }, { status: 401 }),
     };
   }
 }
