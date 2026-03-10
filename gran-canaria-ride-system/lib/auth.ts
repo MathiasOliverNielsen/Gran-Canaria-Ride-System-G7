@@ -57,3 +57,20 @@ export async function authenticate(request: NextRequest): Promise<AuthResult> {
     };
   }
 }
+
+// Helper function for admin-only routes
+export async function requireAdmin(request: NextRequest): Promise<AuthResult> {
+  const authResult = await authenticate(request);
+
+  if (authResult.error) {
+    return authResult;
+  }
+
+  if (!authResult.user?.isAdmin) {
+    return {
+      error: NextResponse.json({ success: false, error: "Admin access required" }, { status: 403 }),
+    };
+  }
+
+  return authResult;
+}

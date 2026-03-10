@@ -49,6 +49,7 @@ export async function GET(request: NextRequest) {
         id: true,
         email: true,
         points: true,
+        isAdmin: true,
         isActive: true,
         createdAt: true,
         updatedAt: true,
