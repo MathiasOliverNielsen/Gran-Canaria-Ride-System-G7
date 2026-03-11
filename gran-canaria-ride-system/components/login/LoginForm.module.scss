@@ -1,0 +1,365 @@
+@import "../../styles/variables.scss";
+
+.container {
+  min-height: 100vh;
+  min-height: 100dvh; // Dynamic viewport height
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--background-light);
+  padding: 2rem;
+  padding-top: max(2rem, env(safe-area-inset-top)); // Safe area for devices with notches
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+}
+
+.formWrapper {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+
+  .brand {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+}
+
+.form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 1rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  background: var(--white);
+
+  &:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  &:disabled {
+    background-color: #f3f4f6;
+    cursor: not-allowed;
+  }
+
+  &::placeholder {
+    color: #9ca3af;
+    opacity: 1;
+  }
+
+  // iOS Safari specific fixes
+  -webkit-border-radius: 8px;
+}
+
+.error {
+  background-color: var(--error-bg);
+  border: 1px solid var(--error-border);
+  color: var(--error-text);
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.button {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.loginButton {
+  background-color: var(--primary-green);
+  color: var(--white);
+
+  &:hover:not(:disabled) {
+    background-color: var(--primary-green-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(43, 125, 115, 0.3);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.linkButton {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.2s ease;
+
+  &:hover:not(:disabled) {
+    color: var(--text-secondary);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.googleButton {
+  background-color: var(--primary-blue);
+  color: var(--white);
+
+  &:hover:not(:disabled) {
+    background-color: var(--primary-blue-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 86, 124, 0.3);
+  }
+}
+
+.createAccountButton {
+  background-color: var(--primary-blue);
+  color: var(--white);
+
+  &:hover:not(:disabled) {
+    background-color: var(--primary-blue-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(40, 86, 124, 0.3);
+  }
+}
+
+.googleIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
+  .formWrapper {
+    padding: 2.5rem 2rem;
+    max-width: 450px;
+    margin-top: 1rem;
+  }
+
+  .title {
+    font-size: 1.625rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 1rem 0.75rem;
+    min-height: 100vh;
+    min-height: 100dvh; // Dynamic viewport height for mobile browsers
+  }
+
+  .formWrapper {
+    padding: 2rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    gap: 1.25rem;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .form {
+    gap: 1.25rem;
+  }
+
+  .inputGroup {
+    gap: 0.375rem;
+  }
+
+  .label {
+    font-size: 0.9rem;
+  }
+
+  .input {
+    padding: 1rem 0.875rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    // Prevent zoom on iOS Safari
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .button {
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 20px;
+    min-height: 48px; // Touch target minimum
+  }
+
+  .linkButton {
+    padding: 0.75rem;
+    min-height: 44px; // Touch target minimum
+    font-size: 0.9rem;
+  }
+
+  .error {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .googleIcon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+// Extra small screens
+@media (max-width: 360px) {
+  .container {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .formWrapper {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .title {
+    font-size: 1.375rem;
+  }
+
+  .input {
+    padding: 0.875rem 0.75rem;
+  }
+
+  .button {
+    padding: 0.875rem 1.25rem;
+  }
+}
+
+// Landscape orientation for mobile
+@media (max-width: 768px) and (orientation: landscape) {
+  .container {
+    padding: 0.75rem 1rem;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .formWrapper {
+    padding: 1.5rem 2rem;
+    gap: 1rem;
+    margin-top: 0;
+  }
+
+  .form {
+    gap: 1rem;
+  }
+
+  .title {
+    font-size: 1.375rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .header {
+    margin-bottom: 0.5rem;
+  }
+}
+
+// High DPI screens
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .formWrapper {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+}
+
+// Validation error styles
+.inputError {
+  border-color: var(--error-border);
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+
+  &:focus {
+    border-color: var(--error-border);
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+  }
+}
+
+.fieldError {
+  font-size: 0.875rem;
+  color: var(--error-text);
+  font-weight: 500;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  &::before {
+    content: "⚠";
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .fieldError {
+    font-size: 0.8rem;
+
+    &::before {
+      font-size: 0.7rem;
+    }
+  }
+}
