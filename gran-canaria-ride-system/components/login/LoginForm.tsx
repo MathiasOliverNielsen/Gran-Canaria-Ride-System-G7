@@ -109,11 +109,10 @@ export default function LoginForm() {
           <div className={styles.inputGroup}>
             <label className={styles.label}>Email</label>
             <input
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className={`${styles.input} ${errors.email ? styles.inputError : ""}`}
-              required
               disabled={loading}
               autoComplete="email"
               inputMode="email"
@@ -129,7 +128,6 @@ export default function LoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className={`${styles.input} ${errors.password ? styles.inputError : ""}`}
-              required
               disabled={loading}
               autoComplete="current-password"
               placeholder="Enter your password"
