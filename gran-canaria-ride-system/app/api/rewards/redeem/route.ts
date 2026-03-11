@@ -1,20 +1,47 @@
 import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-export async function POST(req: Request) {
+interface JWTPayload {
+  userId: number;
+}
+
+export async function POST(req: NextRequest) {
   try {
     const { userId, rewardId } = await req.json();
+    const parsedRewardId = Number(rewardId);
+    const parsedUserId = Number(userId);
+    let effectiveUserId: number | null = Number.isInteger(parsedUserId)
+      ? parsedUserId
+      : null;
 
-    if (!userId || !rewardId) {
+    if (!effectiveUserId) {
+      const cookieToken = req.cookies.get("auth-token")?.value;
+      const authHeader = req.headers.get("authorization");
+      const token =
+        cookieToken ||
+        (authHeader?.startsWith("Bearer ") ? authHeader.substring(7) : null);
+
+      if (token) {
+        try {
+          const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
+          effectiveUserId = decoded.userId;
+        } catch {
+          return NextResponse.json({ error: "Invalid or expired token" }, { status: 401 });
+        }
+      }
+    }
+
+    if (!effectiveUserId || !Number.isInteger(parsedRewardId)) {
       return NextResponse.json(
-        { error: "userId and rewardId are required" },
+        { error: "Valid rewardId and authenticated user are required" },
         { status: 400 }
       );
     }
 
     // Find user
     const user = await prisma.user.findUnique({
-      where: { id: userId },
+      where: { id: effectiveUserId },
     });
 
     if (!user) {
@@ -26,7 +53,7 @@ export async function POST(req: Request) {
 
     // Find reward
     const reward = await prisma.reward.findUnique({
-      where: { id: rewardId },
+      where: { id: parsedRewardId },
     });
 
     if (!reward) {
@@ -44,28 +71,29 @@ export async function POST(req: Request) {
       );
     }
 
-    // Transaction: deduct points + store redemption
-    const result = await prisma.$transaction([
+    // Deduct points and remove reward so it cannot be redeemed again.
+    const [updatedUser] = await prisma.$transaction([
       prisma.user.update({
-        where: { id: userId },
+        where: { id: effectiveUserId },
         data: {
           points: {
             decrement: reward.cost,
           },
         },
-      }),
-
-      prisma.redemption.create({
-        data: {
-          userId: userId,
-          rewardId: rewardId,
+        select: {
+          id: true,
+          points: true,
         },
+      }),
+      prisma.reward.delete({
+        where: { id: parsedRewardId },
       }),
     ]);
 
     return NextResponse.json({
       message: "Reward redeemed successfully",
-      result,
+      user: updatedUser,
+      redeemedRewardId: parsedRewardId,
     });
   } catch (error) {
     console.error("Redeem reward error:", error);
