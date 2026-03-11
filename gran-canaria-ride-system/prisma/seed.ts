@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("🌱 Seeding rewards...");
+  console.log("Seeding rewards...");
 
   await prisma.reward.deleteMany(); // clear old data (optional but good for dev)
 
@@ -32,7 +32,7 @@ async function main() {
     ],
   });
 
-  console.log("✅ Rewards seeded successfully!");
+  console.log("Rewards seeded successfully!");
 }
 
 main()
