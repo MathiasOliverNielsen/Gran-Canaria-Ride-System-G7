@@ -1,0 +1,20 @@
+// Import and reuse login form styles
+@import "../login/LoginForm.module.scss";
+
+// Only register-specific overrides
+.loginPrompt {
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
