@@ -61,7 +61,7 @@ export default function LoginForm() {
 
       if (data.success) {
         // Cookie is automatically set by the server
-        router.push("/dashboard");
+        router.push("/");
         router.refresh(); // Refresh to update auth state
       } else {
         // Set specific error based on server response
