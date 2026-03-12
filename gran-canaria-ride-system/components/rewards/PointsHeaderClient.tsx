@@ -16,11 +16,7 @@ export default function PointsHeaderClient({
   const milestones = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
   return (
-    <header className="points-header">
-      <nav className="header-nav">
-        <img src="/images/Frame 264.svg" alt="MoveWise logo" className="logo" />
-        <button className="menu-button"><img src="/images/Vector.svg" alt="menu" /></button>
-      </nav>
+    <div className="points-header">
 
       <h1 className="page-title">NAME’S POINT PROGRESS</h1>
 
@@ -77,6 +73,6 @@ export default function PointsHeaderClient({
           </div>
         ))}
       </div>
-    </header>
+    </div>
   );
 }

@@ -1,0 +1,23 @@
+.footer-container {
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  background: #28567C;
+}
+
+.footer-text-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 12px;
+  font-weight: bold;
+  padding-left: 25px;
+}
+
+.footer-icons-container {
+  display: flex;
+  justify-content: center;
+  padding-right: 25px;
+  gap: 10px;
+}
