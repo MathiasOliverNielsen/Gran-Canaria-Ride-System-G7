@@ -31,7 +31,6 @@ export default function PointsHeaderClient({
     <header className="points-header">
       <nav className="header-nav">
         <img src="/images/Frame 264.svg" alt="MoveWise logo" className="logo" />
-        <button className="menu-button"><img src="/images/Vector.svg" alt="menu" /></button>
       </nav>
 
       <h1 className="page-title">NAME’S POINT PROGRESS</h1>
@@ -55,17 +54,10 @@ export default function PointsHeaderClient({
 
       <div className="progress-wrapper">
         <div className="progress-bar">
-          <div
-            className="progress-fill"
-            style={{ width: `${percent}%` }}
-          />
+          <div className="progress-fill" style={{ width: `${percent}%` }} />
           {/* Dots at each milestone position */}
           {[0, 25, 50, 75, 100].map((mark) => (
-            <div
-              key={mark}
-              className="progress-dot"
-              style={{ left: `${mark}%` }}
-            />
+            <div key={mark} className="progress-dot" style={{ left: `${mark}%` }} />
           ))}
         </div>
 

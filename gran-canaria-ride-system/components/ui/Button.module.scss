@@ -1,0 +1,163 @@
+@import "../../styles/variables.scss";
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-family: inherit;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+}
+
+// Variants
+.primary {
+  background-color: #3b82f6;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #2563eb;
+  }
+}
+
+.secondary {
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+
+  &:hover:not(:disabled) {
+    background-color: #e5e7eb;
+  }
+}
+
+.danger {
+  background-color: #dc2626;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: #b91c1c;
+  }
+}
+
+.link {
+  background: transparent;
+  color: #3b82f6;
+  text-decoration: underline;
+  padding: 0;
+
+  &:hover:not(:disabled) {
+    color: #2563eb;
+  }
+}
+
+// Sizes
+.sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  min-height: 2rem;
+}
+
+.md {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  min-height: 2.5rem;
+}
+
+.lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+  min-height: 3rem;
+}
+
+.link.sm {
+  padding: 0.25rem;
+}
+
+.link.md {
+  padding: 0.5rem;
+}
+
+.link.lg {
+  padding: 0.75rem;
+}
+
+// Full width
+.fullWidth {
+  width: 100%;
+}
+
+// Icon styles
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconOnly {
+  padding: 0.5rem;
+  min-width: auto;
+  aspect-ratio: 1;
+
+  &.sm {
+    padding: 0.375rem;
+  }
+
+  &.md {
+    padding: 0.5rem;
+  }
+
+  &.lg {
+    padding: 0.75rem;
+  }
+}
+
+// Loading spinner
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Mobile responsive
+@media (max-width: 768px) {
+  .sm {
+    min-height: 2.25rem;
+    padding: 0.5rem 0.875rem;
+  }
+
+  .md {
+    min-height: 2.75rem;
+    padding: 0.75rem 1.25rem;
+  }
+
+  .lg {
+    min-height: 3.25rem;
+    padding: 1rem 1.75rem;
+  }
+}
