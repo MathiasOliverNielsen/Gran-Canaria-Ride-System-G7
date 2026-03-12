@@ -74,3 +74,17 @@ export async function requireAdmin(request: NextRequest): Promise<AuthResult> {
 
   return authResult;
 }
+
+// Helper function that returns validation result in expected format for challenge routes
+export async function validateAuthCookie(request: NextRequest): Promise<{ isValid: boolean; userId?: number }> {
+  const authResult = await authenticate(request);
+
+  if (authResult.error || !authResult.user) {
+    return { isValid: false };
+  }
+
+  return {
+    isValid: true,
+    userId: authResult.user.id,
+  };
+}

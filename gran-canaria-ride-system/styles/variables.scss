@@ -5,4 +5,17 @@
   --primary-blue: #28567c;
   --primary-blue-hover: #1e4059;
   --white: #ffffff;
+
+  // Challenge system colors
+  --challenge-bg: #f5f4f0;
+  --challenge-card-bg: var(--primary-green);
+  --challenge-card-hover: var(--primary-green-hover);
+  --challenge-text: #2c2c2e;
+  --challenge-secondary-text: #8e8e93;
+  --challenge-accent: #007aff;
+  --challenge-success: #34c759;
+  --challenge-modal-overlay: rgba(0, 0, 0, 0.4);
+  --challenge-modal-bg: var(--white);
+  --challenge-border-radius: 12px;
+  --challenge-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
 }
