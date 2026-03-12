@@ -10,6 +10,16 @@ export default function Home() {
           View rewards
         </Link>
       </p>
+      <p>
+        <Link href="/challenges" className="text-green-500 underline">
+          View challenges
+        </Link>
+      </p>
+      <p>
+        <Link href="/admin/challenges" className="text-red-500 underline">
+          Admin - Manage challenges
+        </Link>
+      </p>
     </main>
   );
 }

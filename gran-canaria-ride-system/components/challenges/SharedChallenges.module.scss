@@ -1,0 +1,343 @@
+// Reuse existing login form styles + challenge-specific additions
+@import "../login/LoginForm.module.scss";
+@import "../../styles/variables.scss";
+
+// Challenge page specific styles
+.challengesContainer {
+  background-color: var(--challenge-bg);
+  min-height: 100vh;
+  padding: 1rem;
+
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+  }
+}
+
+.challengesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 0 0.5rem;
+
+  h1 {
+    font-size: clamp(1.3rem, 4vw, 2rem);
+    font-weight: 600;
+    color: var(--challenge-text);
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .userMenu {
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #8b4513;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    position: relative;
+
+    &::after {
+      content: "☰";
+      color: white;
+      font-size: 1.2rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+.challengesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.challengeCard {
+  // Copy button styles instead of extending
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+
+  background-color: var(--challenge-card-bg);
+  color: var(--white);
+
+  &:hover {
+    background-color: var(--challenge-card-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(43, 125, 115, 0.3);
+  }
+
+  .challengeTitle {
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  .challengeAddBtn {
+    font-size: 1.5rem;
+    font-weight: 300;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.activeChallengeCard {
+  background-color: var(--white) !important;
+  color: var(--challenge-text) !important;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 120px;
+
+  &:hover {
+    background-color: #f8f9fa !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.progressBar {
+  width: 100%;
+  height: 6px;
+  background-color: #e5e7eb;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+
+  .progressFill {
+    height: 100%;
+    background-color: var(--challenge-success);
+    transition: width 0.3s ease;
+  }
+}
+
+.progressText {
+  font-size: 0.8rem;
+  color: var(--challenge-secondary-text);
+  margin-bottom: 0.5rem;
+}
+
+// Modal overlay styles
+.challengeModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 200;
+}
+
+.challengeModal {
+  margin: 0;
+  width: min(480px, 100%);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+// Modal content classes
+.challengeInfoModal,
+.challengeAcceptedModal {
+  .modalTitle {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--challenge-text);
+  }
+
+  .challengeStats {
+    margin-bottom: 1.5rem;
+
+    .statRow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #f0f0f0;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .statLabel {
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        letter-spacing: 0.5px;
+        color: var(--challenge-text);
+      }
+
+      .statValue {
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--challenge-text);
+      }
+    }
+  }
+}
+
+// Admin page styles
+.adminContainer {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  background-color: var(--challenge-bg);
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.adminHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--challenge-text);
+    margin: 0;
+  }
+}
+
+// Button variants
+.editBtn,
+.deleteBtn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.editBtn {
+  background-color: var(--challenge-accent);
+  color: var(--white);
+
+  &:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+  }
+}
+
+.deleteBtn {
+  background-color: #dc3545;
+  color: var(--white);
+
+  &:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+  }
+}
+
+.adminCard {
+  background: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  .adminCardInfo {
+    flex: 1;
+
+    h3 {
+      margin: 0 0 0.5rem 0;
+      color: var(--challenge-text);
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0 0 1rem 0;
+      color: var(--challenge-secondary-text);
+      line-height: 1.5;
+    }
+  }
+
+  .adminCardActions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .challengesContainer,
+  .adminContainer {
+    padding: 1rem;
+  }
+
+  .challengesHeader h1,
+  .adminHeader h1 {
+    font-size: 1.5rem;
+  }
+
+  .adminHeader {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+
+  .adminCard {
+    flex-direction: column;
+
+    .adminCardActions {
+      justify-content: flex-start;
+    }
+  }
+
+  .challengeCard {
+    padding: 0.75rem 1rem;
+
+    .challengeTitle {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .challengesHeader .userMenu {
+    width: 2rem;
+    height: 2rem;
+
+    &::after {
+      font-size: 1rem;
+    }
+  }
+
+  .challengeCard .challengeTitle {
+    font-size: 0.85rem;
+  }
+}

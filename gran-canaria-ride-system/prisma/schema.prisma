@@ -27,6 +27,7 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   redemptions Redemption[]
+  userChallenges UserChallenge[]
 }
 
 model Ride {
@@ -60,4 +61,36 @@ model Redemption {
 
   user   User   @relation(fields: [userId], references: [id])
   reward Reward @relation(fields: [rewardId], references: [id])
+}
+
+model Challenge {
+  id           Int      @id @default(autoincrement())
+  title        String   @db.VarChar(150)
+  description  String   @db.Text
+  type         String   @db.VarChar(20) // "daily" or "weekly"
+  goal         Int      // Target value (e.g., 5000 steps, 10 km)
+  goalUnit     String   @db.VarChar(20) // "steps", "km", "minutes"
+  rewardPoints Int
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  userChallenges UserChallenge[]
+}
+
+model UserChallenge {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  challengeId Int
+  status      String   @db.VarChar(20) @default("active") // "active", "completed", "expired"
+  progress    Int      @default(0) // Current progress towards goal
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  expiresAt   DateTime // When the challenge expires
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user      User      @relation(fields: [userId], references: [id])
+  challenge Challenge @relation(fields: [challengeId], references: [id])
+
+  @@unique([userId, challengeId])
 }
