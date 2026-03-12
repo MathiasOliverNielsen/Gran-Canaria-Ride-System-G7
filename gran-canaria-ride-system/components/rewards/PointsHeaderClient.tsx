@@ -2,12 +2,28 @@
 
 interface PointsHeaderProps {
   points: number;
-  distance: number;
-  time: string;
+  stepCount: number;
+  stepGoal: number;
+  isStepLoading: boolean;
+  stepError: string | null;
 }
 
-export default function PointsHeaderClient({ points, distance, time }: PointsHeaderProps) {
-  const percent = Math.min(distance, 100);
+export default function PointsHeaderClient({
+  points,
+  stepCount,
+  stepGoal,
+  isStepLoading,
+  stepError,
+}: PointsHeaderProps) {
+  const percent =
+    stepGoal > 0 ? Math.min(100, Math.floor((stepCount / stepGoal) * 100)) : 0;
+  const distanceKm = (stepCount / 1300).toFixed(1);
+  const minutes = Math.floor(stepCount / 100);
+  const hours = Math.floor(minutes / 60)
+    .toString()
+    .padStart(2, "0");
+  const mins = (minutes % 60).toString().padStart(2, "0");
+  const timeDisplay = `${hours}:${mins}`;
 
   const milestones = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
@@ -22,12 +38,12 @@ export default function PointsHeaderClient({ points, distance, time }: PointsHea
       <div className="stats">
         <div className="stat-item">
           <span className="stat-label">DISTANCE:</span>
-          <span className="stat-value">{distance} KM</span>
+          <span className="stat-value">{distanceKm} KM</span>
         </div>
 
         <div className="stat-item">
           <span className="stat-label">TIME:</span>
-          <span className="stat-value">{time}</span>
+          <span className="stat-value">{timeDisplay}</span>
         </div>
 
         <div className="stat-item points-item">
@@ -47,15 +63,20 @@ export default function PointsHeaderClient({ points, distance, time }: PointsHea
 
         <div className="progress-labels">
           {[0, 25, 50, 75, 100].map((mark) => (
-            <div key={mark} className="progress-mark">
-              {mark}
-              <span>KM</span>
-            </div>
+            <div key={mark} className="progress-mark">{mark}</div>
           ))}
         </div>
       </div>
 
-      {/* KM → POINT BOXES */}
+      {stepError ? (
+        <p className="reward-status">Step sync error: {stepError}</p>
+      ) : isStepLoading ? (
+        <p className="reward-status">Syncing Health Connect steps...</p>
+      ) : (
+        <p className="reward-status">Progress synced from Android Health Connect</p>
+      )}
+
+      {/* Milestone boxes */}
       <div className="milestone-boxes">
         {milestones.map((m) => (
           <div key={m} className="milestone-box">

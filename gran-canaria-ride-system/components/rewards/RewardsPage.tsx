@@ -8,8 +8,10 @@ import "../../styles/rewards.scss";
 
 interface RewardsPageProps {
   userPoints: number;
-  distance: number;
-  time: string;
+  stepCount: number;
+  stepGoal: number;
+  isStepLoading: boolean;
+  stepError: string | null;
   rewards: Reward[];
   selectedReward: Reward | null;
   isRedeemingId: string | null;
@@ -51,8 +53,10 @@ interface RewardsPageProps {
 
 export default function RewardsPage({
   userPoints,
-  distance,
-  time,
+  stepCount,
+  stepGoal,
+  isStepLoading,
+  stepError,
   rewards,
   selectedReward,
   isRedeemingId,
@@ -93,7 +97,13 @@ export default function RewardsPage({
 }: RewardsPageProps) {
   return (
     <div className="rewards-page">
-      <PointsHeaderClient points={userPoints} distance={distance} time={time} />
+      <PointsHeaderClient
+        points={userPoints}
+        stepCount={stepCount}
+        stepGoal={stepGoal}
+        isStepLoading={isStepLoading}
+        stepError={stepError}
+      />
 
       {statusMessage ? <p className="reward-status">{statusMessage}</p> : null}
 

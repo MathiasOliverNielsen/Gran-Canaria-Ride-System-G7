@@ -2,7 +2,55 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import RewardsPage from "@/components/rewards/RewardsPage";
+import {
+  getTodayStepsFromHealthConnect,
+  HealthConnectError,
+} from "../../lib/health-connect";
+import { DAILY_STEP_GOAL } from "../../lib/steps";
 import { Reward } from "@/types/reward";
+
+const GUEST_STEPS_STORAGE_KEY = "guest-health-connect-steps";
+
+function getUtcDateKey(date = new Date()): string {
+  return date.toISOString().slice(0, 10);
+}
+
+function getGuestStepsFromStorage(): number {
+  if (typeof window === "undefined") {
+    return 0;
+  }
+
+  try {
+    const raw = window.localStorage.getItem(GUEST_STEPS_STORAGE_KEY);
+    if (!raw) {
+      return 0;
+    }
+
+    const parsed = JSON.parse(raw) as { date: string; steps: number };
+    if (
+      parsed?.date !== getUtcDateKey() ||
+      !Number.isInteger(parsed?.steps) ||
+      parsed.steps < 0
+    ) {
+      return 0;
+    }
+
+    return parsed.steps;
+  } catch {
+    return 0;
+  }
+}
+
+function saveGuestStepsToStorage(steps: number): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  window.localStorage.setItem(
+    GUEST_STEPS_STORAGE_KEY,
+    JSON.stringify({ date: getUtcDateKey(), steps }),
+  );
+}
 
 export default function Home() {
   type ConfirmModalState =
@@ -12,8 +60,10 @@ export default function Home() {
 
   const [userPoints, setUserPoints] = useState(0);
   const [currentUserId, setCurrentUserId] = useState<number | null>(null);
-  const distance = 0; // km
-  const time = "00:00";
+  const [stepCount, setStepCount] = useState(0);
+  const [isStepLoading, setIsStepLoading] = useState(false);
+  const [stepError, setStepError] = useState<string | null>(null);
+  const [shouldPollHealthConnect, setShouldPollHealthConnect] = useState(true);
   const [rewards, setRewards] = useState<Reward[]>([]);
   const [selectedReward, setSelectedReward] = useState<Reward | null>(null);
   const [isRedeemingId, setIsRedeemingId] = useState<string | null>(null);
@@ -33,6 +83,33 @@ export default function Home() {
   const [formTitle, setFormTitle] = useState("");
   const [formDescription, setFormDescription] = useState("");
   const [formCost, setFormCost] = useState("");
+
+  const applyStepPayload = (payload: any) => {
+    if (payload?.success && typeof payload.data?.steps === "number") {
+      setStepCount(payload.data.steps);
+    }
+  };
+
+  const fetchStepProgress = async () => {
+    const response = await fetch("/api/steps/today");
+
+    if (response.status === 401) {
+      setStepCount(getGuestStepsFromStorage());
+      setStepError(null);
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch step progress: ${response.status}`);
+    }
+
+    const payload = await response.json();
+    applyStepPayload(payload);
+
+    if (payload?.success && typeof payload.data?.steps === "number") {
+      saveGuestStepsToStorage(payload.data.steps);
+    }
+  };
 
   const fetchRewards = async () => {
     const response = await fetch("/api/rewards");
@@ -87,7 +164,92 @@ export default function Home() {
       console.error("Failed to load rewards:", error);
       setStatusMessage("Failed to load rewards");
     });
+
+    fetchStepProgress().catch((error) => {
+      console.error("Failed to load step progress:", error);
+      setStepError("Could not load step progress");
+    });
   }, []);
+
+  useEffect(() => {
+    if (!shouldPollHealthConnect) {
+      return;
+    }
+
+    let isCancelled = false;
+
+    const syncHealthConnectSteps = async () => {
+      setIsStepLoading(true);
+
+      try {
+        const steps = await getTodayStepsFromHealthConnect();
+        const response = await fetch("/api/steps/sync", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            steps,
+            source: "health-connect",
+          }),
+        });
+
+        if (response.status === 401) {
+          if (!isCancelled) {
+            setStepCount(steps);
+            saveGuestStepsToStorage(steps);
+            setStepError(null);
+          }
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error(`Failed to sync steps: ${response.status}`);
+        }
+
+        const payload = await response.json();
+        if (!isCancelled) {
+          applyStepPayload(payload);
+          if (payload?.success && typeof payload.data?.steps === "number") {
+            saveGuestStepsToStorage(payload.data.steps);
+          }
+          setStepError(null);
+        }
+      } catch (error) {
+        if (isCancelled) {
+          return;
+        }
+
+        if (error instanceof HealthConnectError) {
+          setStepError(error.message);
+
+          if (
+            error.code === "NOT_SUPPORTED" ||
+            error.code === "PERMISSION_DENIED" ||
+            error.code === "PROVIDER_UNAVAILABLE"
+          ) {
+            setShouldPollHealthConnect(false);
+          }
+          return;
+        }
+
+        console.error("Health Connect sync error:", error);
+        setStepError("Failed to sync steps from Health Connect");
+      } finally {
+        if (!isCancelled) {
+          setIsStepLoading(false);
+        }
+      }
+    };
+
+    syncHealthConnectSteps();
+    const intervalId = window.setInterval(syncHealthConnectSteps, 15000);
+
+    return () => {
+      isCancelled = true;
+      window.clearInterval(intervalId);
+    };
+  }, [shouldPollHealthConnect]);
 
   const handleViewDetails = async (rewardId: string) => {
     try {
@@ -317,8 +479,10 @@ export default function Home() {
   return (
     <RewardsPage
       userPoints={userPoints}
-      distance={distance}
-      time={time}
+      stepCount={stepCount}
+      stepGoal={DAILY_STEP_GOAL}
+      isStepLoading={isStepLoading}
+      stepError={stepError}
       rewards={rewards}
       selectedReward={selectedReward}
       isRedeemingId={isRedeemingId}
