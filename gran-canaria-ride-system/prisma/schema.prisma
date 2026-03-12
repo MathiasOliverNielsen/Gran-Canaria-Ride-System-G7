@@ -27,6 +27,7 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   redemptions Redemption[]
+  stepDailyRecords StepDaily[]
 }
 
 model Ride {
@@ -60,4 +61,19 @@ model Redemption {
 
   user   User   @relation(fields: [userId], references: [id])
   reward Reward @relation(fields: [rewardId], references: [id])
+}
+
+model StepDaily {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  date      DateTime @db.Date
+  steps     Int      @default(0)
+  source    String   @default("health-connect") @db.VarChar(50)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+  @@index([date])
 }
