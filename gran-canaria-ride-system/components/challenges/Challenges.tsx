@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Challenge, UserChallenge } from "@/types/challenge";
+import { Button, Modal } from "@/components/ui";
+import PlusIcon from "@/components/ui/PlusIcon";
 import styles from "./SharedChallenges.module.scss";
 
 interface ChallengesProps {
@@ -25,6 +27,8 @@ export default function Challenges({ userPoints = 0 }: ChallengesProps) {
         if (response.ok) {
           const challengesData = await response.json();
           setChallenges(challengesData);
+        } else {
+          console.error("Failed to fetch challenges, status:", response.status);
         }
       } catch (error) {
         console.error("Failed to fetch challenges:", error);
@@ -37,6 +41,8 @@ export default function Challenges({ userPoints = 0 }: ChallengesProps) {
         if (response.ok) {
           const data = await response.json();
           setActiveChallenges(data.challenges || []);
+        } else {
+          console.error("Failed to fetch active challenges, status:", response.status);
         }
       } catch (error) {
         console.error("Failed to fetch active challenges:", error);
@@ -46,15 +52,15 @@ export default function Challenges({ userPoints = 0 }: ChallengesProps) {
     Promise.all([fetchChallenges(), fetchActiveChallenges()]).finally(() => setLoading(false));
   }, []);
 
-  const handleAcceptChallenge = async (challengeId: string) => {
-    setAccepting(challengeId);
+  const handleAcceptChallenge = async (challengeId: number) => {
+    setAccepting(challengeId.toString());
     try {
       const response = await fetch("/api/challenges/accept", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ challengeId: parseInt(challengeId) }),
+        body: JSON.stringify({ challengeId }),
       });
 
       if (response.ok) {
@@ -67,7 +73,7 @@ export default function Challenges({ userPoints = 0 }: ChallengesProps) {
       }
     } catch (error) {
       console.error("Failed to accept challenge:", error);
-      alert("Failed to accept challenge");
+      alert("Failed to accept challenge: " + (error instanceof Error ? error.message : String(error)));
     } finally {
       setAccepting(null);
     }
@@ -147,15 +153,25 @@ export default function Challenges({ userPoints = 0 }: ChallengesProps) {
   };
 
   const renderChallengeCard = (challenge: Challenge) => {
-    const isActive = activeChallenges.some((uc) => uc.challengeId === parseInt(challenge.id));
+    const isActive = activeChallenges.some((uc) => uc.challengeId === challenge.id);
 
     if (isActive) return null;
 
     return (
-      <button key={challenge.id} className={styles.challengeCard} onClick={() => handleAcceptChallenge(challenge.id)} disabled={accepting === challenge.id}>
+      <div key={challenge.id} className={styles.challengeCard}>
         <span className={styles.challengeTitle}>{challenge.title}</span>
-        <span className={styles.challengeAddBtn}>{accepting === challenge.id ? "..." : "+"}</span>
-      </button>
+        <Button
+          variant="link"
+          size="sm"
+          onClick={() => {
+            handleAcceptChallenge(challenge.id);
+          }}
+          disabled={accepting === challenge.id.toString()}
+          loading={accepting === challenge.id.toString()}
+          icon={<PlusIcon size={18} color="white" />}
+          iconOnly
+        />
+      </div>
     );
   };
 
@@ -164,11 +180,11 @@ export default function Challenges({ userPoints = 0 }: ChallengesProps) {
     const timeRemaining = getTimeRemaining(userChallenge.expiresAt);
 
     return (
-      <button
+      <div
         key={userChallenge.id}
         className={`${styles.challengeCard} ${styles.activeChallengeCard}`}
         onClick={() => handleViewChallenge(userChallenge)}
-        style={{ background: "var(--white)", color: "var(--challenge-text)" }}
+        style={{ background: "var(--white)", color: "var(--challenge-text)", cursor: "pointer" }}
       >
         <div>
           <div className={styles.challengeTitle} style={{ color: "var(--challenge-text)" }}>
@@ -181,7 +197,7 @@ export default function Challenges({ userPoints = 0 }: ChallengesProps) {
             <div className={styles.progressFill} style={{ width: `${Math.min(progressPercent, 100)}%` }} />
           </div>
         </div>
-      </button>
+      </div>
     );
   };
 
@@ -210,7 +226,7 @@ export default function Challenges({ userPoints = 0 }: ChallengesProps) {
     );
   }
 
-  const availableChallenges = challenges.filter((challenge) => !activeChallenges.some((uc) => uc.challengeId === parseInt(challenge.id)));
+  const availableChallenges = challenges.filter((challenge) => !activeChallenges.some((uc) => uc.challengeId === challenge.id));
 
   return (
     <div className={styles.challengesContainer}>
@@ -233,66 +249,46 @@ export default function Challenges({ userPoints = 0 }: ChallengesProps) {
       </div>
 
       {/* Challenge Info Modal */}
-      {selectedChallenge && (
-        <div className={styles.challengeModalOverlay} onClick={() => setSelectedChallenge(null)}>
-          <div className={styles.challengeModal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.challengeInfoModal}>
-              <h2 className={styles.modalTitle}>Challenge Info</h2>
-              <div className={styles.challengeStats}>
-                <div className={styles.statRow}>
-                  <span className={styles.statLabel}>Progress:</span>
-                  <span className={styles.statValue}>
-                    {selectedChallenge.progress}/{selectedChallenge.challenge!.goal} {selectedChallenge.challenge!.goalUnit.toUpperCase()}
-                  </span>
-                </div>
-                <div className={styles.statRow}>
-                  <span className={styles.statLabel}>Time:</span>
-                  <span className={styles.statValue}>{getTimeRemaining(selectedChallenge.expiresAt)}</span>
-                </div>
-                <div className={styles.statRow}>
-                  <span className={styles.statLabel}>Reward:</span>
-                  <span className={styles.statValue}>{selectedChallenge.challenge!.rewardPoints} POINTS</span>
-                </div>
+      <Modal isOpen={selectedChallenge !== null} onClose={() => setSelectedChallenge(null)} title="Challenge Info" size="md">
+        {selectedChallenge && (
+          <div className={styles.challengeInfoModal}>
+            <div className={styles.challengeStats}>
+              <div className={styles.statRow}>
+                <span className={styles.statLabel}>Progress:</span>
+                <span className={styles.statValue}>
+                  {selectedChallenge.progress}/{selectedChallenge.challenge!.goal} {selectedChallenge.challenge!.goalUnit.toUpperCase()}
+                </span>
               </div>
-              <div style={{ marginBottom: "1rem" }}>
-                <button
-                  className={styles.button}
-                  onClick={() => handleUpdateProgress(selectedChallenge.challengeId, Math.min(selectedChallenge.progress + 1, selectedChallenge.challenge!.goal))}
-                  style={{ marginBottom: "0.5rem", width: "100%" }}
-                  disabled={selectedChallenge.progress >= selectedChallenge.challenge!.goal}
-                >
-                  {selectedChallenge.progress >= selectedChallenge.challenge!.goal ? "Challenge Complete" : `Add Progress (+1 ${selectedChallenge.challenge!.goalUnit})`}
-                </button>
-                <button
-                  className={styles.button}
-                  onClick={() => handleRemoveChallenge(selectedChallenge.challengeId)}
-                  style={{ marginBottom: "0.5rem", width: "100%", background: "#dc3545", color: "white" }}
-                  disabled={removing}
-                >
-                  {removing ? "Removing..." : "Quit Challenge"}
-                </button>
+              <div className={styles.statRow}>
+                <span className={styles.statLabel}>Time:</span>
+                <span className={styles.statValue}>{getTimeRemaining(selectedChallenge.expiresAt)}</span>
               </div>
-              <button className={styles.button} onClick={() => setSelectedChallenge(null)} style={{ width: "100%" }}>
-                Close
-              </button>
+              <div className={styles.statRow}>
+                <span className={styles.statLabel}>Reward:</span>
+                <span className={styles.statValue}>{selectedChallenge.challenge!.rewardPoints} POINTS</span>
+              </div>
             </div>
+            <div style={{ marginBottom: "1rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+              <Button variant="danger" fullWidth onClick={() => handleRemoveChallenge(selectedChallenge.challengeId)} disabled={removing} loading={removing}>
+                Quit Challenge
+              </Button>
+            </div>
+            <Button variant="secondary" fullWidth onClick={() => setSelectedChallenge(null)}>
+              Close
+            </Button>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
 
       {/* Challenge Accepted Modal */}
-      {showAcceptedModal && (
-        <div className={styles.challengeModalOverlay} onClick={() => setShowAcceptedModal(false)}>
-          <div className={styles.challengeModal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.challengeAcceptedModal}>
-              <h2 className={styles.modalTitle}>Challenge Accepted</h2>
-              <button className={styles.button} onClick={() => setShowAcceptedModal(false)} style={{ width: "100%" }}>
-                Close
-              </button>
-            </div>
-          </div>
+      <Modal isOpen={showAcceptedModal} onClose={() => setShowAcceptedModal(false)} title="Challenge Accepted" size="sm">
+        <div className={styles.challengeAcceptedModal}>
+          <p>Great! You've accepted the challenge. Good luck!</p>
+          <Button variant="primary" fullWidth onClick={() => setShowAcceptedModal(false)}>
+            Close
+          </Button>
         </div>
-      )}
+      </Modal>
     </div>
   );
 }

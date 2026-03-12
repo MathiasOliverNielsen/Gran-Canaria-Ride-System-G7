@@ -100,7 +100,7 @@ export default function AdminChallenges() {
     }
   };
 
-  const handleDeleteChallenge = async (challengeId: string) => {
+  const handleDeleteChallenge = async (challengeId: number) => {
     if (!confirm("Are you sure you want to delete this challenge?")) return;
 
     try {

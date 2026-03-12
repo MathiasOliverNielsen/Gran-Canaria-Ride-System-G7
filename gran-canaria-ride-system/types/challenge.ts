@@ -1,5 +1,5 @@
 export interface Challenge {
-  id: string;
+  id: number;
   title: string;
   description: string;
   type: "daily" | "weekly";
@@ -13,7 +13,7 @@ export interface Challenge {
 }
 
 export interface UserChallenge {
-  id: string;
+  id: number;
   userId: number;
   challengeId: number;
   status: "active" | "completed" | "expired";
