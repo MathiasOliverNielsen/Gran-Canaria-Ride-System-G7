@@ -1,12 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(_request: Request, { params }: { params: { id: string } }) {
   try {
-    const { id } = await params;
+    const { id } = params;
     const rewardId = Number(id);
 
     if (!Number.isInteger(rewardId) || rewardId <= 0) {
@@ -32,19 +29,13 @@ export async function GET(
   } catch (error) {
     console.error("GET /api/rewards/[id] error:", error);
 
-    return NextResponse.json(
-      { error: "Failed to fetch reward details" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch reward details" }, { status: 500 });
   }
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
-    const { id } = await params;
+    const { id } = params;
     const rewardId = Number(id);
 
     if (!Number.isInteger(rewardId) || rewardId <= 0) {
@@ -53,15 +44,11 @@ export async function PUT(
 
     const body = await request.json();
     const title = typeof body.title === "string" ? body.title.trim() : "";
-    const description =
-      typeof body.description === "string" ? body.description.trim() : "";
+    const description = typeof body.description === "string" ? body.description.trim() : "";
     const cost = Number(body.cost);
 
     if (!title || !description || !Number.isInteger(cost) || cost <= 0) {
-      return NextResponse.json(
-        { error: "title, description and a positive integer cost are required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "title, description and a positive integer cost are required" }, { status: 400 });
     }
 
     const updatedReward = await prisma.reward.update({
@@ -84,19 +71,13 @@ export async function PUT(
   } catch (error) {
     console.error("PUT /api/rewards/[id] error:", error);
 
-    return NextResponse.json(
-      { error: "Failed to update reward" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to update reward" }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
   try {
-    const { id } = await params;
+    const { id } = params;
     const rewardId = Number(id);
 
     if (!Number.isInteger(rewardId) || rewardId <= 0) {
@@ -111,9 +92,6 @@ export async function DELETE(
   } catch (error) {
     console.error("DELETE /api/rewards/[id] error:", error);
 
-    return NextResponse.json(
-      { error: "Failed to delete reward" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to delete reward" }, { status: 500 });
   }
 }

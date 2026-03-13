@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "leaflet/dist/leaflet.css";
 
@@ -7,12 +7,12 @@
   --foreground: #171717;
 }
 
-@theme inline {
+/* @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
+} */
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -24,7 +24,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Quicksand', Arial, Helvetica, sans-serif;
+  font-family: "Quicksand", Arial, Helvetica, sans-serif;
 }
 
 .hero-section {
@@ -58,7 +58,7 @@ body {
 }
 
 .background-square {
-  background: #F2ECE1;
+  background: #f2ece1;
   width: 197px;
   height: 164px;
   border-radius: 14px;
@@ -141,7 +141,7 @@ body {
 }
 
 .card {
-  background-color: #2B7D73;
+  background-color: #2b7d73;
   display: flex;
   height: 364px;
   align-items: center;
@@ -151,7 +151,7 @@ body {
   padding: 0 45px;
   border-radius: 14px;
 
-  >.title {
+  > .title {
     font-size: 16px;
     color: white;
     font-weight: bold;
@@ -159,13 +159,12 @@ body {
     margin-bottom: 10px;
   }
 
-  >.description {
+  > .description {
     font-size: 12px;
     color: white;
     text-align: center;
   }
 }
-
 
 @media (min-width: 1024px) {
   .hero-image {
@@ -181,5 +180,3 @@ body {
     font-weight: bold;
   }
 }
-
-
