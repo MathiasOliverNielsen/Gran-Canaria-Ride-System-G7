@@ -83,6 +83,23 @@ async function main() {
     ],
   });
 
+  await prisma.rentalPoint.createMany(
+    {
+      data: [
+        {
+          name: 'Punto 1',
+          latitude: 28.1097949,
+          longitude: -15.418554,
+        },
+        {
+          name: 'Punto 2',
+          latitude: 28.1280274,
+          longitude: -15.4497047,
+        }
+      ]
+    }
+  )
+
   console.log("Challenges seeded successfully!");
 }
 

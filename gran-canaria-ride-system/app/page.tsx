@@ -1,10 +1,54 @@
+"use client"
+
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useRef } from "react";
+import {useHeaderContext} from "../context/HeaderContext";
 
 export default function Home() {
+  const sectionRef = useRef(null);
+  const { setHeader } = useHeaderContext()
+  const initialized = useRef(false);
+
+  useEffect(() => {
+    setHeader({
+      color: "white",
+      position: "fixed"
+    })
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!initialized.current) {
+          initialized.current = true;
+          return;
+        }
+
+        if (entry.isIntersecting) {
+          setHeader({ color: "white", position: "fixed" });
+        } else {
+          setHeader({ color: "black", position: "fixed" });
+        }
+      },
+      {
+        rootMargin: "-80px 0px 0px 0px",
+        threshold: 0,
+      }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return (() => {
+      setHeader({
+        color: "black",
+        position: "sticky"
+      })
+      observer.disconnect()
+    })
+  }, []);
+
   return (
     <main>
-
       <section className="hero-section">
         <img src="/images/hero-section.png" alt="hero-section" className="hero-image"/>
         <img src="/images/hero-section-mobile.png" alt="hero-section" className="hero-image-mobile"/>
@@ -15,6 +59,8 @@ export default function Home() {
           <p>Ride sustainable</p>
         </div>
       </section>
+
+      <div ref={sectionRef}/>
 
       <section className="about-us">
         <div className="about-us-text">
@@ -49,33 +95,25 @@ export default function Home() {
         </div>
 
         <div className="card-section">
-          
+          <Link className="card" href={"/rewards"}>
+            <img src="/images/rewards-page-icon.png" alt="rewards-page"/>
+            <div className={"title"}>Get some points and get some reward</div>
+            <div className={"description"}>
+              Select your bike and choose the rental plan that fits your needs and get some points
+            </div>
+          </Link>
+          <Link className="card" href={"/challenges"}>
+            <img src="/images/challenges-page-icon.png" alt="challenges-page"/>
+            <div className={"title"}>Do some challenges and get some points</div>
+            <div className={"description"}>Enjoy with our reward system, ride safely and sustainably.</div>
+          </Link>
+          <Link className="card" href={"/rental-points"}>
+            <img src="/images/rental-points-icon.png" alt="rental-points"/>
+            <div className={"title"}>Find the available bike near you </div>
+            <div className={"description"}>Visit one of our rental points, scan the QR code on your bike or scooter, and unlock it instantly.</div>
+          </Link>
         </div>
       </section>
-
-      {/*<p>*/}
-      {/*  <Link href="/rewards" className="text-blue-500 underline">*/}
-      {/*    View rewards*/}
-      {/*  </Link>*/}
-      {/*</p>*/}
-      <h1>Welcome to Gran Canaria Ride System</h1>
-      <p>This is the home page.</p>
-      <p>
-        <Link href="/rewards" className="text-blue-500 underline">
-          View rewards
-        </Link>
-      </p>
-      <p>
-        <Link href="/challenges" className="text-green-500 underline">
-          View challenges
-        </Link>
-      </p>
-      <p>
-        <Link href="/admin/challenges" className="text-red-500 underline">
-          Admin - Manage challenges
-        </Link>
-      </p>
     </main>
   );
 }
-

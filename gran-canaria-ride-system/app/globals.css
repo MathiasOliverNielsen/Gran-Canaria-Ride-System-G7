@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 :root {
   --background: #ffffff;
@@ -132,7 +133,37 @@ body {
 
 .card-section {
   height: 1188px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 48px;
+  align-items: center;
+  padding-bottom: 20px;
+}
 
+.card {
+  background-color: #2B7D73;
+  display: flex;
+  height: 364px;
+  align-items: center;
+  justify-content: center;
+  width: 284px;
+  flex-direction: column;
+  padding: 0 45px;
+  border-radius: 14px;
+
+  >.title {
+    font-size: 16px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+
+  >.description {
+    font-size: 12px;
+    color: white;
+    text-align: center;
+  }
 }
 
 
