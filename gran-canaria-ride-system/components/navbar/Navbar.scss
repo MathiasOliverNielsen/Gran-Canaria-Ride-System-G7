@@ -1,0 +1,51 @@
+.navbar-container {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  z-index: 99999;
+  height: 100dvh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.navbar {
+  width: 225px;
+  background-color: #2B7D73;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.navbar-hamburger-container {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 24px;
+}
+
+.navbar-routes-list {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  row-gap: 24px;
+  padding-left: 24px;
+  margin-top: 74px;
+
+  > .navbar-route-item {
+    display: flex;
+    column-gap: 14px;
+  }
+}
+
+.navbar-logout-container {
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-logout {
+  display: flex;
+  color: white;
+  column-gap: 14px;
+}

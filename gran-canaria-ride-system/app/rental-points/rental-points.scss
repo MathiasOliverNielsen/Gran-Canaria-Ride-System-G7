@@ -1,0 +1,19 @@
+.rental-points-container {
+  height: calc(100dvh - 160px);
+  display: flex;
+  flex-direction: column;
+  padding: 10px 24px;
+}
+
+.rental-points-container-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.rental-points-container-text h2 {
+  font-size: 20px;
+  font-weight: bold;
+}
